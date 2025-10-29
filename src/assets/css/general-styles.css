@@ -1,0 +1,77 @@
+
+:root {
+  --bg-main: #111822;
+  --bg-panel: #1e2a38;
+  --bg-section: #2e3e50;
+  --text-color: #ffffff;
+  --text-muted: #9aa4b2;
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+}
+
+.header {
+  background-color: var(--bg-panel);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: var(--primary);
+}
+
+.main-content {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+
+.section {
+  background-color: var(--bg-section);
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2.5rem;
+}
+
+.section h2 {
+  color: var(--primary);
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.section h3 {
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin-top: 1.2rem;
+  margin-bottom: .6rem;
+}
+
+.section p, .section ul {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.section ul {
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+.section ul li {
+  margin-bottom: 0.5rem;
+}
+
+
+.nota {
+  font-size: .85rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  text-align: right;
+}
+
+
+

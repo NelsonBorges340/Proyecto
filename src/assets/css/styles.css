@@ -1,0 +1,220 @@
+
+main {
+    margin: 0 auto;
+
+    width: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+
+    min-height: 500px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 50px auto;
+
+    background-image: url("../img/sillon.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+    border-radius: 15px;
+
+}
+
+.hero-section h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+
+.hero-search {
+    display: flex;
+    justify-content: center;
+    background-color: var(--background-color);
+    border-radius: 5px;
+}
+
+.hero-search input {
+    all: unset;
+    text-align: left;
+    padding: 10px;
+    border-radius: 8px;
+    width: 250px;
+    font-size: 1rem;
+    background-color: var(--background-color);
+
+}
+
+.hero-search button img {
+    width: 20px;
+}
+
+.hero-search button {
+
+
+    padding: 10px 15px;
+
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+
+    background-color: var(--color-btn-other-);
+    border: none;
+    color: #3863ff;
+}
+
+.opciones-servicios {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.opciones { 
+
+    padding: 1rem;
+    border-radius: 15px;
+
+    background-color:var(--background-color-modal);
+    box-shadow: var(--box-shadow);
+    color: var(--text-color);
+
+   transition: transform 0.3s ease ;
+   cursor: pointer;  
+}
+.opciones:hover {
+  transform: scale(1.1); 
+   box-shadow: 0 8px 24px rgba(5, 109, 228, 0.61)
+}
+
+.about-hirenear-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  width: 90%;
+    max-width: 900px;
+    min-height: 450px;
+
+    margin: 7rem auto 5rem auto;
+    padding: 50px;
+    gap: 30px;
+
+    border-radius: 20px;
+
+    background-color: var(--background-color-modal);
+    box-shadow: var(--box-shadow);
+
+    color: var(--text-color);
+}
+.about-hirenear-section h2 { 
+     color: var(--text-color-title);
+    font-size: 2rem;
+    font-weight: 600;
+}
+.about-hirenear-section p {
+       font-size: 1.2rem; 
+}
+.about-hirenear-section strong {
+    color: var(--text-color-title);
+}
+
+ .hero-categorias h1 {
+    text-align: center;
+    color: var(--text-color-title);
+    font-size: 2rem;
+    font-weight: 600;
+    padding-bottom:1rem ;
+
+ }.hero-categorias {
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  margin: 7rem auto 3rem;
+  padding: 40px 20px;
+  max-width: 900px;
+  min-height: 450px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.explora-categorias {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px; 
+}
+
+.explora-categorias a {
+  display: inline-block;
+  color: var(--text-color);
+  border: 2px solid #60a5fa;
+  border-radius: 50px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.explora-categorias a:hover {
+  background: #60a5fa;
+  color: #0f172a;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+.mas-valorados {
+    display: flex;
+     gap: 60px;
+    margin: 0 auto 3rem auto;
+    padding: 20px;
+    width: 100%;
+    border-radius: 20px;
+    max-width: 1000px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+
+}
+
+.mas-valorados::-webkit-scrollbar {
+    height: 8px;
+}
+
+.mas-valorados::-webkit-scrollbar-thumb {
+    background-color: #60a5fa;
+    border-radius: 4px;
+}
+
+.mas-valorados::-webkit-scrollbar-track {
+    background: transparent;
+}
+.mas-valorados-title {   text-align: center;   font-size: 2rem;    color: var(--text-color-title);  margin: 7rem auto 0 auto; font-weight: 700;}
+
+
+.tarjeta {  flex: 0 0 auto;    display: flex;    flex-direction: column;    align-items: center;    text-align: center;    background-color: var(--background-color-modal);box-shadow: var(--box-shadow);    border-radius: 20px;    padding: 20px; width: 250px; transition: transform 0.3s ease, box-shadow 0.3s ease;}
+.tarjeta img {   width: 120px;   height: 120px;  border-radius: 50%;   object-fit: cover;   margin-bottom: 15px;    border: 3px solid #60a5fa;    transition: transform 0.3s ease;}
+.tarjeta img:hover {  transform: scale(1.05);}
+.tarjeta p { font-size: 1rem;color: var(--text-color);  margin: 5px 0; text-align: center;}
+.tarjeta #oficio { color: var(--text-color-shadow);   margin: 10px;}
+.tarjeta #valoracion { color: var(--text-color-shadow);}
+.tarjeta a { background-color: #60a5fa; color: var(--background-color-modal); border: none; padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.3);}
+.tarjeta a:hover {  background-color: #3b82f6; transform: scale(1.05);}
+
+
+.enviar { background-color: #60a5fa; color: var(--background-color-modal); border: none; padding: 8px 20px; border-radius: 50px; cursor: pointer;  box-shadow: 0 4px 12px rgba(0,0,0,0.3);}

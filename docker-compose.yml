@@ -1,0 +1,65 @@
+services:
+  # -----------------------------------
+  # SERVICIO PHP / APACHE (app)
+  # -----------------------------------
+  app:
+    # Indica que debe construir la imagen buscando el Dockerfile dentro de la carpeta 'php'
+    build: ./php/ 
+    container_name: php-apache
+    
+    # El contenedor se inicia solo si la DB está 'healthy' (saludable)
+    depends_on:
+      db:
+        condition: service_healthy
+        
+    ports:
+      - "8080:80"
+      
+    # Inyecta las variables de conexión a la app desde el archivo .env
+    environment:
+      DB_HOST: db
+      DB_NAME: $MARIADB_DATABASE
+      DB_USER: $MARIADB_USER
+      DB_PASS: $MARIADB_PASSWORD
+      
+    # Monta el código de tu proyecto web en el servidor Apache
+    volumes:
+      - ./src:/var/www/html:z
+
+  # -----------------------------------
+  # SERVICIO MARIA DB (db)
+  # -----------------------------------
+  db:
+    image: mariadb:11
+    container_name: mariadb-db
+    
+    # Usa variables del .env para configurar la DB al inicio
+    environment:
+
+      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+      MARIADB_DATABASE: $MARIADB_DATABASE
+      MARIADB_USER: $MARIADB_USER
+      MARIADB_PASSWORD: $MARIADB_PASSWORD
+  
+      
+    # Verifica que la DB esté lista antes de que PHP intente conectarse
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+    # Persistencia de datos y scripts de inicialización (si los tienes)
+    volumes:
+      # Guarda los datos de la DB para que persistan
+      - mariadb_data:/var/lib/mysql:z
+      # Monta la carpeta para scripts SQL iniciales (si tienes alguno)
+      - ./initdb:/docker-entrypoint-initdb.d:ro,z 
+      
+    restart: unless-stopped
+
+# -----------------------------------
+# VOLUMENES (Persistencia de datos)
+# -----------------------------------
+volumes:
+  mariadb_data:
