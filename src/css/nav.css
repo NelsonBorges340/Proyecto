@@ -1,0 +1,42 @@
+/* NAV minimalista MANEKI */
+:root{
+  --nav-bg:#6e9277;
+  --nav-text:#e1d0bd;
+  --nav-hover:rgba(255,255,255,.1);
+}
+
+.site-nav{
+  position: sticky; top:0; z-index:1000;
+  background: var(--nav-bg);
+}
+.site-nav .inner{
+  max-width: 1200px; margin: 0 auto;
+  height: 64px;
+  padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* Nombre MANEKI */
+.site-nav .brand{
+  text-decoration:none;
+  color: var(--nav-text);
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Botón volver */
+.site-nav .back{
+  background: transparent;
+  border: 1px solid var(--nav-text);
+  color: var(--nav-text);
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background .15s ease;
+}
+.site-nav .back:hover{
+  background: var(--nav-hover);
+}

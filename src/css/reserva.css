@@ -1,0 +1,127 @@
+#reserva-root { margin-top: 16px; }
+
+#reserva-root .rz-msg {
+  font-size: 14px;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+#reserva-root .rz-months {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+#reserva-root .rz-month {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+#reserva-root .rz-title {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+#reserva-root .rz-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+#reserva-root .rz-dow {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 4px 0;
+}
+
+#reserva-root .rz-empty { height: 36px; }
+
+#reserva-root .rz-day {
+  height: 36px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  color: #1f2937;
+  transition: transform .06s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+#reserva-root .rz-day:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0,0,0,.06);
+  border-color: #cbd5e1;
+}
+
+#reserva-root .rz-day.is-reserved,
+#reserva-root .rz-day:disabled {
+  background: #f8fafc;
+  color: #9ca3af;
+  border-style: dashed;
+  cursor: default;
+  box-shadow: none;
+}
+/* ---- Modal de confirmación ---- */
+#confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#confirm-box {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  padding: 22px 28px;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  animation: fadeIn .25s ease;
+}
+
+#confirm-box h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+#confirm-box p {
+  color: #374151;
+  margin: 12px 0 20px;
+}
+
+#confirm-box .btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+#confirm-box button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter .15s ease, transform .06s ease;
+}
+
+#confirm-box .ok {
+  background: #2563eb;
+  color: #fff;
+}
+#confirm-box .ok:hover { filter: brightness(1.05); }
+#confirm-box .cancel {
+  background: #e5e7eb;
+  color: #111827;
+}
+#confirm-box .cancel:hover { filter: brightness(0.95); }
+
+@keyframes fadeIn { from{opacity:0; transform:scale(.95);} to{opacity:1; transform:scale(1);} }

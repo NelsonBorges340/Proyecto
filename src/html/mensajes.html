@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajería | MANEKI</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            background: #f4f5f7;
+            font-family: 'Poppins', sans-serif;
+        }
+        .volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 20px 30px;
+            color: #6e9277;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .mensajeria {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            display: flex;
+            gap: 20px;
+            padding: 0 20px;
+        }
+        .panel-lateral, .panel-chat {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(20, 38, 54, 0.1);
+            border: 1px solid #e1d0bd;
+        }
+        .panel-lateral {
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 120px);
+        }
+        .panel-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 120px);
+        }
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid #e1d0bd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .panel-header h2 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .panel-header button {
+            background: #6e9277;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .panel-header button:hover {
+            background: #eab308;
+            color: #222;
+        }
+        .notificaciones {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e1d0bd;
+            overflow-y: auto;
+        }
+        .notificaciones h3 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: #415156;
+        }
+        .solicitud-card {
+            border: 1px solid #e1d0bd;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #faf8f1;
+        }
+        .solicitud-card h4 {
+            margin: 0 0 6px;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        .solicitud-card p {
+            margin: 0 0 10px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .solicitud-card .acciones {
+            display: flex;
+            gap: 8px;
+        }
+        .solicitud-card button {
+            flex: 1;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-aceptar {
+            background: #6e9277;
+            color: #fff;
+        }
+        .btn-rechazar {
+            background: #f87171;
+            color: #fff;
+        }
+        .lista-contactos {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .contacto-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0e6da;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .contacto-item:hover, .contacto-item.activo {
+            background: #f5f0e6;
+        }
+        .contacto-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .contacto-nombre {
+            font-weight: 600;
+            color: #1f2933;
+        }
+        .contacto-rol {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .badge {
+            background: #eab308;
+            color: #222;
+            font-weight: 600;
+            padding: 0 8px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #e1d0bd;
+        }
+        .chat-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        .chat-mensajes {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #faf8f5 0%, #ffffff 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .mensaje-burbuja {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(20, 38, 54, 0.08);
+        }
+        .mensaje-mio {
+            align-self: flex-end;
+            background: #6e9277;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .mensaje-otro {
+            align-self: flex-start;
+            background: #f0eadf;
+            color: #1f2933;
+            border-bottom-left-radius: 4px;
+        }
+        .mensaje-hora {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 6px;
+            display: block;
+        }
+        .placeholder {
+            margin: auto;
+            text-align: center;
+            color: #94a3b8;
+            max-width: 360px;
+        }
+        .form-mensaje {
+            padding: 16px 20px;
+            border-top: 1px solid #e1d0bd;
+            display: flex;
+            gap: 12px;
+        }
+        .form-mensaje input {
+            flex: 1;
+            border: 1px solid #d5c9bb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: border 0.2s;
+        }
+        .form-mensaje input:focus {
+            outline: none;
+            border-color: #6e9277;
+        }
+        .form-mensaje button {
+            background: #6e9277;
+            color: #fff;
+            border: none;
+            padding: 0 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .form-mensaje button[disabled] {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal.oculto {
+            display: none;
+        }
+        .modal-contenido {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 540px;
+            width: 100%;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+            border: 1px solid #e1d0bd;
+        }
+        .modal-contenido h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .buscador {
+            display: flex;
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .buscador input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #d5c9bb;
+            font-size: 0.95rem;
+        }
+        .buscador button {
+            background: #6e9277;
+            color: #fff;
+            border: none;
+            padding: 0 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .resultados-busqueda {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .resultado-item {
+            padding: 12px;
+            border: 1px solid #f0e6da;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .resultado-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .resultado-info span:first-child {
+            font-weight: 600;
+            color: #1f2933;
+        }
+        .resultado-info span:last-child {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .resultado-item button {
+            border: none;
+            border-radius: 10px;
+            background: #6e9277;
+            color: #fff;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .resultado-item button.deshabilitado {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+        .modal-cerrar {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        .modal-cerrar button {
+            background: transparent;
+            border: none;
+            color: #6e7580;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        @media (max-width: 992px) {
+            .mensajeria {
+                flex-direction: column;
+            }
+            .panel-lateral, .panel-chat {
+                max-height: none;
+            }
+            .panel-lateral {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a class="volver" href="index.php">← Volver</a>
+    <main class="mensajeria">
+        <aside class="panel-lateral">
+            <div class="panel-header">
+                <h2>Mis contactos</h2>
+                <button id="btnAgregarContacto">+ Nuevo</button>
+            </div>
+            <section class="notificaciones">
+                <h3>Solicitudes</h3>
+                <div id="listaSolicitudes"></div>
+            </section>
+            <section class="lista-contactos" id="listaContactos"></section>
+        </aside>
+        <section class="panel-chat">
+            <div class="chat-header">
+                <h2 id="tituloChat">Selecciona un contacto para comenzar</h2>
+            </div>
+            <div class="chat-mensajes" id="contenedorMensajes">
+                <p class="placeholder">Aquí aparecerán tus conversaciones. Acepta solicitudes o inicia un chat desde el panel lateral.</p>
+            </div>
+            <form class="form-mensaje" id="formMensaje">
+                <input type="text" id="inputMensaje" placeholder="Escribe tu mensaje..." autocomplete="off" disabled>
+                <button type="submit" disabled>Enviar</button>
+            </form>
+        </section>
+    </main>
+
+    <div class="modal oculto" id="modalBuscar">
+        <div class="modal-contenido">
+            <h3>Agregar contacto</h3>
+            <p>Busca personas por nombre o correo electrónico para enviarles una solicitud.</p>
+            <div class="buscador">
+                <input type="text" id="inputBuscarUsuario" placeholder="Ej.: Maria Perez">
+                <button type="button" id="btnBuscarUsuario">Buscar</button>
+            </div>
+            <div class="resultados-busqueda" id="resultadosBusqueda"></div>
+            <div class="modal-cerrar">
+                <button id="btnCerrarModal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const state = {
+            user: null,
+            contacts: [],
+            incomingRequests: [],
+            outgoingRequests: [],
+            activeContactId: null,
+            activeChatId: null,
+            loadingMessages: false,
+        };
+
+        async function fetchJSON(url, options = {}) {
+            const response = await fetch(url, options);
+            if (response.status === 401) {
+                window.location.href = 'finicio.html';
+                return null;
+            }
+            const data = await response.json();
+            if (!response.ok) {
+                const message = data && data.error ? data.error : 'Ocurrió un error';
+                throw new Error(message);
+            }
+            return data;
+        }
+
+        function renderSolicitudes() {
+            const contenedor = document.getElementById('listaSolicitudes');
+            contenedor.innerHTML = '';
+            if (!state.incomingRequests.length) {
+                const vacio = document.createElement('p');
+                vacio.className = 'placeholder';
+                vacio.textContent = 'Sin solicitudes pendientes.';
+                contenedor.appendChild(vacio);
+                return;
+            }
+
+            state.incomingRequests.forEach((solicitud) => {
+                const card = document.createElement('div');
+                card.className = 'solicitud-card';
+
+                const titulo = document.createElement('h4');
+                titulo.textContent = solicitud.nombreCompleto;
+                card.appendChild(titulo);
+
+                const detalle = document.createElement('p');
+                detalle.textContent = `Quiere agregarte (${solicitud.rol}).`;
+                card.appendChild(detalle);
+
+                const acciones = document.createElement('div');
+                acciones.className = 'acciones';
+
+                const btnAceptar = document.createElement('button');
+                btnAceptar.className = 'btn-aceptar';
+                btnAceptar.textContent = 'Aceptar';
+                btnAceptar.onclick = () => gestionarSolicitud(solicitud.id, 'aceptar');
+
+                const btnRechazar = document.createElement('button');
+                btnRechazar.className = 'btn-rechazar';
+                btnRechazar.textContent = 'Rechazar';
+                btnRechazar.onclick = () => gestionarSolicitud(solicitud.id, 'rechazar');
+
+                acciones.append(btnAceptar, btnRechazar);
+                card.appendChild(acciones);
+                contenedor.appendChild(card);
+            });
+        }
+
+        function renderContactos() {
+            const lista = document.getElementById('listaContactos');
+            lista.innerHTML = '';
+
+            if (!state.contacts.length) {
+                const vacio = document.createElement('p');
+                vacio.className = 'placeholder';
+                vacio.textContent = 'Aún no tienes contactos. Envía una solicitud desde el botón "+ Nuevo".';
+                lista.appendChild(vacio);
+                return;
+            }
+
+            state.contacts.forEach((contacto) => {
+                const item = document.createElement('div');
+                item.className = 'contacto-item';
+                if (contacto.contacto_id === state.activeContactId) {
+                    item.classList.add('activo');
+                }
+
+                const info = document.createElement('div');
+                info.className = 'contacto-info';
+
+                const nombre = document.createElement('span');
+                nombre.className = 'contacto-nombre';
+                nombre.textContent = contacto.nombreCompleto;
+
+                const rol = document.createElement('span');
+                rol.className = 'contacto-rol';
+                rol.textContent = contacto.rol;
+
+                info.append(nombre, rol);
+                item.appendChild(info);
+
+                if (contacto.unread_count > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge';
+                    badge.textContent = contacto.unread_count;
+                    item.appendChild(badge);
+                }
+
+                item.onclick = () => seleccionarContacto(contacto.contacto_id);
+                lista.appendChild(item);
+            });
+        }
+
+        async function gestionarSolicitud(id, accion) {
+            try {
+                await fetchJSON('../php/solicitudes_chat.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({action: accion, solicitud_id: id}),
+                });
+                await cargarEstado();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        async function cargarEstado() {
+            try {
+                const data = await fetchJSON('../php/chat.php?action=bootstrap');
+                if (!data) return;
+                state.user = data.user;
+                state.contacts = data.contacts || [];
+                state.incomingRequests = data.incoming_requests || [];
+                state.outgoingRequests = data.outgoing_requests || [];
+                renderSolicitudes();
+                renderContactos();
+                if (state.activeContactId !== null) {
+                    const sigueExistiendo = state.contacts.find((c) => c.contacto_id === state.activeContactId);
+                    if (!sigueExistiendo) {
+                        resetChat();
+                    }
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function resetChat() {
+            state.activeContactId = null;
+            state.activeChatId = null;
+            document.getElementById('tituloChat').textContent = 'Selecciona un contacto para comenzar';
+            document.getElementById('contenedorMensajes').innerHTML = '<p class="placeholder">Aquí aparecerán tus conversaciones. Acepta solicitudes o inicia un chat desde el panel lateral.</p>';
+            document.querySelector('#formMensaje button').disabled = true;
+            document.getElementById('inputMensaje').value = '';
+            document.getElementById('inputMensaje').disabled = true;
+        }
+
+        async function seleccionarContacto(contactoId) {
+            if (state.loadingMessages || state.activeContactId === contactoId) {
+                return;
+            }
+            const contacto = state.contacts.find((c) => c.contacto_id === contactoId);
+            if (!contacto) return;
+
+            state.activeContactId = contactoId;
+            document.getElementById('tituloChat').textContent = contacto.nombreCompleto;
+            document.querySelector('#formMensaje button').disabled = false;
+            document.getElementById('inputMensaje').disabled = false;
+            renderContactos();
+
+            try {
+                let chatId = contacto.chat_id || state.activeChatId;
+                if (!chatId) {
+                    const {chat_id} = await fetchJSON(`../php/chat.php?action=get_chat&contact_id=${contactoId}`);
+                    chatId = chat_id;
+                    contacto.chat_id = chatId;
+                }
+                state.activeChatId = chatId;
+                await cargarMensajes(chatId);
+                await cargarEstado();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function formatearFecha(fechaISO) {
+            if (!fechaISO) return '';
+            const fecha = new Date(fechaISO.replace(' ', 'T'));
+            return fecha.toLocaleString();
+        }
+
+        async function cargarMensajes(chatId) {
+            state.loadingMessages = true;
+            const contenedor = document.getElementById('contenedorMensajes');
+            contenedor.innerHTML = '<p class="placeholder">Cargando conversación...</p>';
+            try {
+                const data = await fetchJSON(`../php/chat.php?action=messages&chat_id=${chatId}`);
+                contenedor.innerHTML = '';
+                if (!data.messages.length) {
+                    contenedor.innerHTML = '<p class="placeholder">Aún no hay mensajes. ¡Envía el primero!</p>';
+                    return;
+                }
+                data.messages.forEach((msg) => {
+                    const burbuja = document.createElement('div');
+                    burbuja.className = 'mensaje-burbuja ' + (msg.isMine ? 'mensaje-mio' : 'mensaje-otro');
+                    burbuja.textContent = msg.message;
+                    const hora = document.createElement('span');
+                    hora.className = 'mensaje-hora';
+                    hora.textContent = formatearFecha(msg.created_at);
+                    burbuja.appendChild(hora);
+                    contenedor.appendChild(burbuja);
+                });
+                contenedor.scrollTop = contenedor.scrollHeight;
+            } catch (error) {
+                contenedor.innerHTML = `<p class="placeholder">${error.message}</p>`;
+            } finally {
+                state.loadingMessages = false;
+            }
+        }
+
+        async function enviarMensaje(event) {
+            event.preventDefault();
+            const input = document.getElementById('inputMensaje');
+            const boton = document.querySelector('#formMensaje button');
+            const texto = input.value.trim();
+            if (!texto || !state.activeChatId) return;
+
+            boton.disabled = true;
+            try {
+                const payload = {
+                    action: 'send_message',
+                    chat_id: state.activeChatId,
+                    message: texto,
+                };
+                await fetchJSON('../php/chat.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload),
+                });
+                input.value = '';
+                await cargarMensajes(state.activeChatId);
+                await cargarEstado();
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                boton.disabled = false;
+                input.focus();
+            }
+        }
+
+        function mostrarModal() {
+            document.getElementById('modalBuscar').classList.remove('oculto');
+            document.getElementById('inputBuscarUsuario').focus();
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalBuscar').classList.add('oculto');
+            document.getElementById('inputBuscarUsuario').value = '';
+            document.getElementById('resultadosBusqueda').innerHTML = '';
+        }
+
+        async function buscarUsuarios() {
+            const query = document.getElementById('inputBuscarUsuario').value.trim();
+            const resultados = document.getElementById('resultadosBusqueda');
+            resultados.innerHTML = '';
+            if (query.length < 2) {
+                resultados.innerHTML = '<p class="placeholder">Escribe al menos 2 caracteres.</p>';
+                return;
+            }
+            try {
+                const data = await fetchJSON(`../php/chat.php?action=search_users&q=${encodeURIComponent(query)}`);
+                if (!data.users.length) {
+                    resultados.innerHTML = '<p class="placeholder">No se encontraron usuarios.</p>';
+                    return;
+                }
+                data.users.forEach((usuario) => {
+                    const item = document.createElement('div');
+                    item.className = 'resultado-item';
+
+                    const info = document.createElement('div');
+                    info.className = 'resultado-info';
+                    info.innerHTML = `
+                        <span>${usuario.nombreCompleto}</span>
+                        <span>${usuario.rol}</span>
+                    `;
+
+                    const boton = document.createElement('button');
+                    boton.type = 'button';
+
+                    switch (usuario.estado) {
+                        case 'contacto':
+                            boton.textContent = 'Abrir chat';
+                            boton.onclick = async () => {
+                                cerrarModal();
+                                await cargarEstado();
+                                seleccionarContacto(usuario.idUsuario);
+                            };
+                            break;
+                        case 'pendiente_recibida':
+                            boton.textContent = 'Aceptar solicitud';
+                            boton.onclick = async () => {
+                                try {
+                                    await fetchJSON('../php/solicitudes_chat.php', {
+                                        method: 'POST',
+                                        headers: {'Content-Type': 'application/json'},
+                                        body: JSON.stringify({
+                                            action: 'aceptar',
+                                            solicitud_id: usuario.solicitud_recibida_id,
+                                        }),
+                                    });
+                                    await cargarEstado();
+                                    cerrarModal();
+                                } catch (error) {
+                                    alert(error.message);
+                                }
+                            };
+                            break;
+                        case 'pendiente_enviada':
+                            boton.textContent = 'Solicitud enviada';
+                            boton.classList.add('deshabilitado');
+                            boton.disabled = true;
+                            break;
+                        default:
+                            boton.textContent = 'Enviar solicitud';
+                            boton.onclick = async () => {
+                                try {
+                                    await fetchJSON('../php/solicitudes_chat.php', {
+                                        method: 'POST',
+                                        headers: {'Content-Type': 'application/json'},
+                                        body: JSON.stringify({
+                                            action: 'crear',
+                                            receptor_id: usuario.idUsuario,
+                                        }),
+                                    });
+                                    await cargarEstado();
+                                    buscarUsuarios();
+                                } catch (error) {
+                                    alert(error.message);
+                                }
+                            };
+                    }
+
+                    item.append(info, boton);
+                    resultados.appendChild(item);
+                });
+            } catch (error) {
+                resultados.innerHTML = `<p class="placeholder">${error.message}</p>`;
+            }
+        }
+
+        document.getElementById('btnAgregarContacto').addEventListener('click', mostrarModal);
+        document.getElementById('btnCerrarModal').addEventListener('click', cerrarModal);
+        document.getElementById('btnBuscarUsuario').addEventListener('click', buscarUsuarios);
+        document.getElementById('formMensaje').addEventListener('submit', enviarMensaje);
+        document.getElementById('inputBuscarUsuario').addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                buscarUsuarios();
+            }
+        });
+        document.getElementById('modalBuscar').addEventListener('click', (event) => {
+            if (event.target.id === 'modalBuscar') {
+                cerrarModal();
+            }
+        });
+
+        cargarEstado();
+        setInterval(() => {
+            if (state.activeChatId && !state.loadingMessages) {
+                cargarMensajes(state.activeChatId);
+            }
+        }, 7000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <a href="index.php" class="volve">
+    &#8592; Volver
+  </a>
+    <form class="form-base" method="post" action="../php/login.php">
+        <h2>Iniciar Sesión</h2>
+        <label for="usuario">Nombre de usuario</label>
+        <input type="text" id="usuario" name="usuario" required>
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Ingresar</button>
+        <div style="text-align:center; margin-top:12px;">
+            <a href="registro.html" style="color:#6e9277; text-decoration:underline;">¿No tienes cuenta? Registrate</a>
+        </div>
+    </form>
+</body>
+</html>

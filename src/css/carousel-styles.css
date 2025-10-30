@@ -1,0 +1,19 @@
+/* Estilos para el carrusel de servicios y proveedores */
+.carousel-container{position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;}
+.carousel-track{display: flex;
+    transition: transform 0.5s ease-in-out;}
+.btn-prev, .btn-next{position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;}
+.btn-prev{left: 10px;}
+.btn-next{right: 10px;}

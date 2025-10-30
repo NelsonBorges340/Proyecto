@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .admin-container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .admin-section {
+      margin-bottom: 30px;
+      padding: 25px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+    }
+    .admin-section h2 {
+      color: #6e9277;
+      margin-bottom: 25px;
+      text-align: left;
+      font-size: 1.5rem;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e9ecef;
+    }
+    .search-bar {
+      margin-bottom: 25px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .search-bar input {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+      font-size: 1rem;
+      flex: 1;
+      transition: all 0.3s ease;
+    }
+    .search-bar input:focus {
+      outline: none;
+      border-color: #6e9277;
+      box-shadow: 0 0 0 3px rgba(110, 146, 119, 0.1);
+    }
+    .search-bar button {
+      background: #6e9277;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .search-bar button:hover {
+      background: #5d7b63;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(110, 146, 119, 0.2);
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 25px;
+    }
+    .admin-table th, .admin-table td {
+      border: none;
+      border-bottom: 1px solid #e9ecef;
+      padding: 16px;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    .admin-table th {
+      background: #f8f9fa;
+      color: #6e9277;
+      font-weight: 600;
+      border-bottom: 2px solid #6e9277;
+    }
+    .admin-table tr:hover {
+      background-color: #f8f9fa;
+    }
+    .admin-table tr:nth-child(even) {
+      background: #fcfcfc;
+    }
+    .admin-actions button {
+      background: #6e9277;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 8px;
+      transition: all 0.3s ease;
+    }
+    .admin-actions button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(110, 146, 119, 0.2);
+    }
+    .admin-actions button:first-child {
+      background: #6e9277;
+    }
+    .admin-actions button:last-child {
+      background: #dc3545;
+    }
+    .admin-actions button:last-child:hover {
+      background: #c82333;
+      box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+    }
+    /* Scroll para la tabla de usuarios */
+    .usuarios-table-wrapper {
+      max-height: 320px; /* 5 filas de ~64px cada una */
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid #e1d0bd;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      margin-bottom: 18px;
+    }
+/* Scroll y contenedor para Servicios y Categorías */
+.servicios-table-wrapper,
+.categorias-table-wrapper {
+  max-height: 250px;
+  overflow: auto;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(110, 146, 119, 0.2);
+}
+
+
+    .modal-content {
+      position: relative;
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      width: 70%;
+      max-width: 500px;
+      border-radius: 8px;
+    }
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #000;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .form-actions {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .btn-new {
+      background: #6e9277;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .btn-new:hover {
+      background: #5a7960;
+    }
+    .admin-table tbody tr {
+      height: 64px;
+    }
+    @media (max-width: 700px) {
+      .admin-container {
+        padding: 12px;
+      }
+      .admin-table th, .admin-table td {
+        padding: 6px 4px;
+        font-size: 0.95rem;
+      }
+      .usuarios-table-wrapper {
+        max-height: 250px;
+      }
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 24px;
+      border-radius: 10px;
+      min-width: 320px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    .modal-content label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .modal-content select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 18px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .modal-content button {
+      background: #6e9277;
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: background 0.2s;
+    }
+    .modal-content button:hover {
+      background: #eab308;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.php" class="volve">
+    &#8592; Volver
+  </a>
+  <div class="admin-container">
+    <div class="admin-section">
+      <h2>Gestión de Usuarios</h2>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Buscar por ID, nombre o correo...">
+        <button onclick="buscarUsuario()">Buscar</button>
+        <button onclick="limpiarBusqueda()">Limpiar</button>
+      </div>
+      <div class="usuarios-table-wrapper">
+        <table class="admin-table" id="usuarios-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usuarios-tbody">
+            <!-- Los usuarios se cargarán aquí dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="admin-section">
+      <h2>Gestión de Servicios</h2>
+      <div class="search-bar">
+  <input type="text" id="searchServicioInput" placeholder="Buscar por ID, título o categoría...">
+  <button onclick="buscarServicio()">Buscar</button>
+  <button onclick="limpiarBusquedaServicio()">Limpiar</button>
+</div>
+<div class="servicios-table-wrapper">
+  <table class="admin-table" id="servicios-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="servicios-tbody">
+          <!-- Los servicios se cargarán aquí dinámicamente -->
+        </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>Gestión de Categorías</h2>
+      <div class="search-bar">
+  <input type="text" id="searchCategoriaInput" placeholder="Buscar por ID, nombre o descripción...">
+  <button onclick="buscarCategoria()">Buscar</button>
+  <button onclick="limpiarBusquedaCategoria()">Limpiar</button>
+</div>
+
+      <button class="btn-new" onclick="abrirModalCategoria()">Nueva Categoría</button>
+     <div class="categorias-table-wrapper">
+  <table class="admin-table" id="categorias-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Total Servicios</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="categorias-tbody">
+          <!-- Las categorías se cargarán aquí dinámicamente -->
+        </tbody>
+      </table>
+</div>
+    </div>
+  </div>
+
+  <!-- Modal para editar rol de usuario -->
+  <div class="modal" id="modal-rol">
+    <div class="modal-content">
+      <form id="form-rol">
+        <input type="hidden" id="edit-idUsuario" name="idUsuario">
+        <label for="edit-rol">Rol de usuario</label>
+        <select id="edit-rol" name="rol" required>
+          <option value="cliente">Cliente</option>
+          <option value="proveedor">Proveedor</option>
+          <option value="administrador">Administrador</option>
+        </select>
+        <button type="submit">Guardar</button>
+        <button type="button" onclick="cerrarModal()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para nueva/editar categoría -->
+  <div class="modal" id="modal-categoria">
+    <div class="modal-content">
+      <h3>Nueva Categoría</h3>
+      <form id="form-categoria">
+        <input type="hidden" id="categoria-id">
+        <div class="form-group">
+          <label for="categoria-nombre">Nombre:</label>
+          <input type="text" id="categoria-nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="categoria-descripcion">Descripción:</label>
+          <textarea id="categoria-descripcion" rows="3"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Guardar</button>
+          <button type="button" onclick="cerrarModalCategoria()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let usuariosData = [];
+
+    function cargarUsuarios() {
+      fetch('../php/admin-list.php?tipo=usuarios')
+        .then(res => res.json())
+        .then(data => {
+          usuariosData = data;
+          renderUsuarios(data);
+        });
+    }
+
+    function renderUsuarios(data) {
+      const tbody = document.getElementById('usuarios-tbody');
+      tbody.innerHTML = '';
+      data.forEach(u => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${u.id}</td>
+            <td>${u.usuario}</td>
+            <td>${u.correo}</td>
+            <td>${u.rol}</td>
+            <td class="admin-actions">
+              <button onclick="editarUsuario(${u.id}, '${u.rol}')">Editar</button>
+              <button onclick="eliminarUsuario(${u.id})">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function buscarUsuario() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!query) {
+        renderUsuarios(usuariosData);
+        return;
+      }
+      const filtrados = usuariosData.filter(u =>
+        u.id.toString().includes(query) ||
+        u.usuario.toLowerCase().includes(query) ||
+        u.correo.toLowerCase().includes(query)
+      );
+      renderUsuarios(filtrados);
+    }
+
+    function limpiarBusqueda() {
+      document.getElementById('searchInput').value = '';
+      renderUsuarios(usuariosData);
+    }
+
+    function cargarServicios() {
+      fetch('../php/admin-list.php?tipo=servicios')
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.getElementById('servicios-tbody');
+          tbody.innerHTML = '';
+          data.forEach(s => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${s.id}</td>
+                <td>${s.titulo}</td>
+                <td>${s.categoria}</td>
+                <td>$${s.precio}</td>
+                <td class="admin-actions">
+                  <button onclick="editarServicio(${s.id})">Editar</button>
+                  <button onclick="eliminarServicio(${s.id})">Eliminar</button>
+                </td>
+              </tr>
+            `;
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar servicios:', error);
+          document.getElementById('servicios-tbody').innerHTML = 
+            '<tr><td colspan="5" style="text-align: center; color: red;">Error al cargar los servicios</td></tr>';
+        });
+    }
+
+    function renderServicios(servicios) {
+      console.log('Renderizando servicios:', servicios);
+      const tbody = document.getElementById('servicios-tbody');
+      
+      if (!tbody) {
+        console.error('No se encontró el elemento tbody#servicios-tbody');
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      
+      if (!Array.isArray(servicios) || servicios.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 20px;">
+              No hay servicios disponibles
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      servicios.forEach(s => {
+        if (!s || typeof s !== 'object') {
+          console.error('Servicio inválido:', s);
+          return;
+        }
+        
+        const id = s.id || 'N/A';
+        const titulo = s.titulo || 'Sin título';
+        const categoria = s.categoria || 'Sin categoría';
+        const precio = typeof s.precio === 'number' ? `$${s.precio.toFixed(2)}` : '$0.00';
+        const estado = s.estado || 'Activo';
+        
+        tbody.innerHTML += `
+          <tr>
+            <td>${id}</td>
+            <td>${titulo}</td>
+            <td>${categoria}</td>
+            <td>${precio}</td>
+            <td>${estado}</td>
+            <td class="admin-actions">
+              <button onclick="editarServicio(${id})">Editar</button>
+              <button onclick="eliminarServicio(${id})">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function buscarServicio() {
+      const query = document.getElementById('searchServicioInput').value.trim().toLowerCase();
+      if (!query) {
+        renderServicios(serviciosData);
+        return;
+      }
+      const filtrados = serviciosData.filter(s =>
+        s.id.toString().includes(query) ||
+        s.titulo.toLowerCase().includes(query) ||
+        (s.categoria && s.categoria.toLowerCase().includes(query))
+      );
+      renderServicios(filtrados);
+    }
+
+    function limpiarBusquedaServicio() {
+      document.getElementById('searchServicioInput').value = '';
+      renderServicios(serviciosData);
+    }
+    function cargarCategorias() {
+      fetch('../php/admin-list.php?tipo=categorias')
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.getElementById('categorias-tbody');
+          tbody.innerHTML = '';
+          data.forEach(c => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${c.idCategoria}</td>
+                <td>${c.nombre}</td>
+                <td>${c.descripcion || '-'}</td>
+                <td>${c.total_servicios}</td>
+                <td class="admin-actions">
+                  <button onclick="editarCategoria(${c.idCategoria}, '${c.nombre}', '${c.descripcion || ''}')">
+                    Editar
+                  </button>
+                  <button onclick="eliminarCategoria(${c.idCategoria}, ${c.total_servicios})">
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            `;
+          });
+        });
+    }
+
+    function abrirModalCategoria() {
+      document.getElementById('categoria-id').value = '';
+      document.getElementById('categoria-nombre').value = '';
+      document.getElementById('categoria-descripcion').value = '';
+      document.getElementById('modal-categoria').style.display = 'block';
+    }
+
+    function cerrarModalCategoria() {
+      document.getElementById('modal-categoria').style.display = 'none';
+    }
+
+    function editarCategoria(id, nombre, descripcion) {
+      document.getElementById('categoria-id').value = id;
+      document.getElementById('categoria-nombre').value = nombre;
+      document.getElementById('categoria-descripcion').value = descripcion;
+      document.getElementById('modal-categoria').style.display = 'block';
+    }
+
+    document.getElementById('form-categoria').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const id = document.getElementById('categoria-id').value;
+      const nombre = document.getElementById('categoria-nombre').value;
+      const descripcion = document.getElementById('categoria-descripcion').value;
+
+      const data = {
+        nombre: nombre,
+        descripcion: descripcion
+      };
+
+      if (id) {
+        data.id = id;
+        fetch('../php/admin-categorias.php', {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            cerrarModalCategoria();
+            cargarCategorias();
+          } else {
+            alert('Error al actualizar la categoría: ' + data.error);
+          }
+        });
+      } else {
+        fetch('../php/admin-categorias.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            cerrarModalCategoria();
+            cargarCategorias();
+          } else {
+            alert('Error al crear la categoría: ' + data.error);
+          }
+        });
+      }
+    });
+
+    function eliminarCategoria(id, totalServicios) {
+      if (totalServicios > 0) {
+        if (!confirm(`Esta categoría tiene ${totalServicios} servicios asociados. Al eliminarla, estos servicios quedarán sin categoría. ¿Desea continuar?`)) {
+          return;
+        }
+      } else if (!confirm('¿Está seguro de que desea eliminar esta categoría?')) {
+        return;
+      }
+
+      fetch('../php/admin-categorias.php', {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: id})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          cargarCategorias();
+        } else {
+          alert('Error al eliminar la categoría: ' + data.error);
+        }
+      });
+    }
+
+    cargarUsuarios();
+    cargarServicios();
+    cargarCategorias();
+
+    // Modal para editar rol
+    function editarUsuario(id, rolActual) {
+      document.getElementById('edit-idUsuario').value = id;
+      document.getElementById('edit-rol').value = rolActual;
+      document.getElementById('modal-rol').style.display = 'flex';
+    }
+    function cerrarModal() {
+      document.getElementById('modal-rol').style.display = 'none';
+    }
+    document.getElementById('form-rol').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-idUsuario').value;
+      const rol = document.getElementById('edit-rol').value;
+      fetch('../php/editar-rol-usuario.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id, rol})
+      })
+      .then(res => res.text())
+      .then(() => {
+        cerrarModal();
+        cargarUsuarios();
+      });
+    });
+
+    function eliminarUsuario(id) {
+      if(confirm("¿Seguro que deseas eliminar el usuario ID " + id + "?")) {
+        fetch('../php/eliminar-usuario.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({id})
+        }).then(() => cargarUsuarios());
+      }
+    }
+    function eliminarServicio(id) {
+      if(confirm("¿Seguro que deseas eliminar el servicio ID " + id + "?")) {
+        fetch('../php/eliminar-servicio.php', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({id})
+        }).then(() => cargarServicios());
+      }
+    }
+  </script>
+</body>
+</html>

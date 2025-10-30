@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Servicios</title>
+
+<!-- ✅ Navbar unificada -->
+<link rel="stylesheet" href="../css/nav.css">
+
+<!-- Tus estilos existentes -->
+<link rel="stylesheet" href="../css/styles.css">
+<style>
+ :root{
+  --verde:#6e9277;
+  --verde-osc:#527460;
+  --beige:#e1d0bd;
+  --beige-2:#fff6ee;
+  --beige-3:#efe6dc;
+  --texto:#2f3c33;
+  --borde:#d9c8b6;
+}
+
+/* Contenedor principal */
+.wrap{
+  width: 92%;
+  max-width: 1100px;
+  margin: 110px auto 28px; /* margen top para dejar espacio al header sticky */
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  color: var(--texto);
+}
+
+/* Título */
+.wrap h2{
+  margin: 6px 0 14px;
+  font-size: 22px;
+  color: var(--texto);
+}
+
+/* Busca + botón filtros */
+.fila-filtros{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.search{
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--texto);
+  outline: none;
+}
+.search:focus{
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(110,146,119,.15);
+}
+
+.boton-filtros{
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid var(--verde);
+  background: var(--verde);
+  color: var(--beige);
+  cursor: pointer;
+  transition: .15s ease;
+}
+.boton-filtros:hover{ filter: brightness(1.05); }
+.boton-filtros:active{ transform: translateY(1px); }
+
+/* Panel de filtros */
+.panel-filtros{
+  display: none;
+  background: var(--beige-3);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 12px;
+  margin: 10px 0 12px;
+}
+.panel-filtros .fila{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.panel-filtros label{
+  font-size: 14px;
+  margin: 6px 0 4px;
+  color: #3e4a42;
+}
+.panel-filtros input,
+.panel-filtros select{
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+  outline: none;
+}
+.panel-filtros input:focus,
+.panel-filtros select:focus{
+  border-color: var(--verde);
+  box-shadow: 0 0 0 2px rgba(110,146,119,.15);
+}
+
+.panel-actions{
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.btn{
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 2px solid var(--verde);
+  background: var(--verde);
+  color: var(--beige);
+  cursor: pointer;
+  transition: .15s ease;
+}
+.btn:hover{ filter: brightness(1.05); }
+.btn.outline{
+  background: #fff;
+  color: var(--texto);
+}
+
+/* Lista de servicios */
+.lista-servicios{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* Tarjeta de servicio */
+.card{
+  flex: 1 1 260px;
+  max-width: 320px;
+  background: var(--beige-2);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: left;
+  transition: box-shadow .2s ease, transform .08s ease;
+}
+.card:hover{
+  box-shadow: 0 6px 14px rgba(0,0,0,.09);
+  transform: translateY(-1px);
+}
+.card img{
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #faf7f2;
+  border: 1px solid var(--borde);
+}
+.card h3{
+  font-size: 18px;
+  margin: 8px 0 4px;
+  color: var(--texto);
+}
+.meta{
+  font-size: 14px;
+  color: #4a5850;
+}
+.precio{
+  margin-top: 6px;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+/* Link “ver detalle” */
+.card a{
+  display: inline-block;
+  margin-top: 8px;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--verde);
+  color: var(--verde-osc);
+  background: #fff;
+  transition: .15s ease;
+}
+.card a:hover{
+  background: var(--verde);
+  color: var(--beige);
+}
+
+/* Mensaje vacío */
+.vacio{
+  background: var(--beige-3);
+  border: 1px dashed var(--borde);
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+  color: #4a5850;
+  display: none;
+}
+
+/* Chips */
+.chip{
+  display: inline-block;
+  background: rgba(110,146,119,.12);
+  border: 1px solid rgba(110,146,119,.35);
+  color: var(--texto);
+  padding: 4px 8px;
+  border-radius: 14px;
+  font-size: 12px;
+  margin: 4px 6px 0 0;
+}
+
+/* Responsive */
+@media (max-width: 600px){
+  .panel-filtros .fila{ grid-template-columns: 1fr; }
+  .card{ max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ✅ Header igual que index -->
+<header class="site-nav">
+  <div class="inner">
+    <a class="brand" href="index.php">MANEKI</a>
+    <a class="back" href="index.php">Volver al inicio</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <h2>Servicios</h2>
+
+  <div class="fila-filtros">
+    <input id="q" type="text" class="search" placeholder="Buscar por nombre...">
+    <button id="btnFiltros" class="boton-filtros">Filtros</button>
+  </div>
+
+  <div id="panelFiltros" class="panel-filtros">
+    <label>Precio mínimo</label>
+    <input id="min" type="number" placeholder="0">
+
+    <label>Precio máximo</label>
+    <input id="max" type="number" placeholder="9999">
+
+    <label>Categoría</label>
+    <select id="categoria">
+      <option value="">Todas</option>
+    </select>
+
+    <label>Zona</label>
+    <input id="zona" type="text" placeholder="Ej: Centro, Montevideo">
+
+    <button id="btnAplicar" class="btn">Aplicar</button>
+    <button id="btnLimpiar" class="btn outline">Limpiar</button>
+  </div>
+
+  <div id="lista" class="lista-servicios"></div>
+  <div id="vacio" class="vacio">No se encontraron servicios</div>
+</div>
+
+<script>
+  const API = {
+    servicios: "../php/listar-servicios.php",
+    categorias: "../php/obtener-categorias.php"
+  };
+
+  const st = { q:"", min:"", max:"", categoria:"", zona:"" };
+  let servicios = [];
+
+  function $(id){ return document.querySelector(id); }
+
+  $("#btnFiltros").addEventListener("click", () => {
+    const p = $("#panelFiltros");
+    p.style.display = p.style.display === "block" ? "none" : "block";
+  });
+
+  $("#q").addEventListener("input", e => {
+    st.q = e.target.value.toLowerCase();
+    render();
+  });
+
+  $("#btnAplicar").addEventListener("click", () => {
+    st.min = $("#min").value;
+    st.max = $("#max").value;
+    st.categoria = $("#categoria").value;
+    st.zona = $("#zona").value.toLowerCase();
+    render();
+    $("#panelFiltros").style.display = "none";
+  });
+
+  $("#btnLimpiar").addEventListener("click", () => {
+    ["min","max","zona","q"].forEach(id => $("#"+id).value = "");
+    $("#categoria").value = "";
+    st.q = st.min = st.max = st.categoria = st.zona = "";
+    render();
+  });
+
+  async function cargarCategorias(){
+    try {
+      const r = await fetch(API.categorias);
+      const cats = await r.json();
+      const sel = $("#categoria");
+      cats.forEach(c => {
+        const op = document.createElement("option");
+        op.value = c.id;
+        op.textContent = c.nombre;
+        sel.appendChild(op);
+      });
+    } catch (e){ console.log(e); }
+  }
+
+  async function cargarServicios(){
+    try {
+      const r = await fetch(API.servicios);
+      const lista = await r.json();
+      servicios = Array.isArray(lista) ? lista : [];
+      render();
+    } catch (e){ console.log(e); }
+  }
+
+  function render(){
+    const cont = $("#lista");
+    const vacio = $("#vacio");
+    cont.innerHTML = "";
+    const filtrados = servicios.filter(s=>{
+      const titulo = (s.titulo||"").toLowerCase();
+      const zona = (s.ubicacion||"").toLowerCase();
+      const p = Number(s.precio||0);
+      const cat = String(s.categoria||"");
+      return (!st.q || titulo.includes(st.q))
+        && (!st.zona || zona.includes(st.zona))
+        && (!st.categoria || cat === st.categoria)
+        && (!st.min || p >= st.min)
+        && (!st.max || p <= st.max);
+    });
+
+    if(filtrados.length === 0){
+      vacio.style.display = "block";
+      return;
+    }
+    vacio.style.display = "none";
+
+    filtrados.forEach(s=>{
+      const card = `
+        <div class="card">
+          <img src="${s.imagen || '../php/mostrar-imagen.php?id='+s.idServicio}" alt="imagen">
+          <h3>${s.titulo}</h3>
+          <div class="meta">${s.categoria} - ${s.ubicacion}</div>
+          <div class="precio">$${s.precio}</div>
+          <a href="ver-servicio.php?id=${s.idServicio}">Ver más</a>
+        </div>
+      `;
+      cont.insertAdjacentHTML("beforeend", card);
+    });
+  }
+
+  cargarCategorias();
+  cargarServicios();
+</script>
+</body>
+</html>
